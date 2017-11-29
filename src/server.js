@@ -1,6 +1,8 @@
 import Express from 'express';
 import path from 'path';
 import proxy from 'http-proxy-middleware';
+import {graphqlExpress, graphiqlExpress} from 'graphql-server-express'
+import bodyParser from 'body-parser'
 
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -8,8 +10,10 @@ import ReactDOMServer from 'react-dom/server';
 
 import { StaticRouter } from 'react-router';
 
-import Html from './pages/Html';
-import Layout from './pages/Layout';
+import {schema} from './backend/schema'
+
+import Html from './frontend/pages/Html';
+import Layout from './frontend/pages/Layout';
 
 let PORT = 3000;
 if (process.env.PORT) {
@@ -28,6 +32,16 @@ if (process.env.NODE_ENV === 'production') {
     proxy({ target: 'http://localhost:3020', pathRewrite: { '^/static': '' } })
   );
 }
+
+// graphql resource - add request token and user to context
+app.post('/graphql', bodyParser.urlencoded({extended: true}), bodyParser.json(), graphqlExpress(() => ({
+  schema
+})))
+
+// graphiql
+app.use('/graphiql', bodyParser.urlencoded({extended: true}), bodyParser.json(), graphiqlExpress({
+  endpointURL: '/graphql'
+}))
 
 app.use((req, res) => {
   const context = {};

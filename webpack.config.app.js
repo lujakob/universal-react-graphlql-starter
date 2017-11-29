@@ -5,9 +5,9 @@ const DEV = process.env.NODE_ENV !== 'production';
 module.exports = {
   bail: !DEV,
   devtool: DEV ? 'cheap-module-source-map' : 'source-map',
-  entry: './src/frontend/client.js',
+  entry: './src/frontend/app.js',
   output: {
-    path: __dirname + '/build/client',
+    path: __dirname + '/build/app',
     filename: 'bundle.js',
     publicPath: '/',
   },
