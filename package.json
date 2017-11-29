@@ -1,0 +1,41 @@
+{
+  "name": "universal-react-graphlql-starter",
+  "version": "1.0.0",
+  "description": "Fullstack javascript starter. webpack, apollo-react, express, graphql, universal",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/server/bundle.js",
+    "dev": "NODE_ENV=development concurrently -c blue,cyan,magenta \"webpack --watch --config webpack.config.server.js\" \"sleep 3 && nodemon --watch build/server build/server/bundle.js\" \"webpack-dev-server -d --hot --inline --no-info --port 3020 --config webpack.config.client.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lujakob/universal-react-graphlql-starter.git"
+  },
+  "author": "Lukas Jakob",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lujakob/universal-react-graphlql-starter/issues"
+  },
+  "homepage": "https://github.com/lujakob/universal-react-graphlql-starter#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react-native": "^4.0.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "nodemon": "^1.12.1",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.5"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "http-proxy-middleware": "^0.17.4",
+    "path": "^0.12.7",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-native-web": "^0.1.14",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2"
+  }
+}
