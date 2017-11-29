@@ -3,6 +3,11 @@ import path from 'path';
 import proxy from 'http-proxy-middleware';
 import {graphqlExpress, graphiqlExpress} from 'graphql-server-express'
 import bodyParser from 'body-parser'
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloProvider } from 'react-apollo';
+import fetch from 'node-fetch';
 
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -16,9 +21,15 @@ import Html from './frontend/pages/Html';
 import Layout from './frontend/pages/Layout';
 
 let PORT = 3000;
+
 if (process.env.PORT) {
   PORT = parseInt(process.env.PORT, 10);
 }
+
+const API_HOST =
+  process.env.NODE_ENV !== 'production'
+    ? 'http://localhost:' + PORT
+    : 'https://api.githunt.com';
 
 const app = new Express();
 
@@ -44,12 +55,25 @@ app.use('/graphiql', bodyParser.urlencoded({extended: true}), bodyParser.json(),
 }))
 
 app.use((req, res) => {
+  const link = new HttpLink({
+    fetch,
+    uri: `${API_HOST}/graphql`,
+  })
+
+  const client = new ApolloClient({
+    ssrMode: true,
+    link,
+    cache: new InMemoryCache(),
+  });
+
   const context = {};
 
   const component = (
-    <StaticRouter location={req.url} context={context}>
-      <Layout />
-    </StaticRouter>
+    <ApolloProvider client={client}>
+      <StaticRouter location={req.url} context={context}>
+        <Layout />
+      </StaticRouter>
+    </ApolloProvider>
   );
 
   const content = ReactDOMServer.renderToString(component);

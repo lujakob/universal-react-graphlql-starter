@@ -40,6 +40,7 @@
     "graphql-tag": "^2.5.0",
     "graphql-tools": "^2.10.0",
     "http-proxy-middleware": "^0.17.4",
+    "node-fetch": "^1.7.3",
     "path": "^0.12.7",
     "react": "^16.2.0",
     "react-apollo": "^2.0.1",
