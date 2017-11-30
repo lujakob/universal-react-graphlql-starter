@@ -26,6 +26,15 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /(node_modules)/,
       },
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        loader: 'graphql-tag/loader',
+      },
     ],
   },
   plugins: [

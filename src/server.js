@@ -4,10 +4,9 @@ import proxy from 'http-proxy-middleware';
 import {graphqlExpress, graphiqlExpress} from 'graphql-server-express'
 import bodyParser from 'body-parser'
 import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
+
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
-import fetch from 'node-fetch';
 
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -19,6 +18,7 @@ import {schema} from './backend/schema'
 
 import Html from './frontend/pages/Html';
 import Layout from './frontend/pages/Layout';
+import {getHttpLink} from './links'
 
 let PORT = 3000;
 
@@ -54,15 +54,12 @@ app.use('/graphiql', bodyParser.urlencoded({extended: true}), bodyParser.json(),
   endpointURL: '/graphql'
 }))
 
+// server side rendering
 app.use((req, res) => {
-  const link = new HttpLink({
-    fetch,
-    uri: `${API_HOST}/graphql`,
-  })
 
   const client = new ApolloClient({
     ssrMode: true,
-    link,
+    link: getHttpLink(API_HOST),
     cache: new InMemoryCache(),
   });
 
