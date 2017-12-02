@@ -4,6 +4,7 @@ import proxy from 'http-proxy-middleware';
 import {graphqlExpress, graphiqlExpress} from 'graphql-server-express'
 import bodyParser from 'body-parser'
 import { ApolloClient } from 'apollo-client';
+import { renderToStringWithData } from 'react-apollo'
 
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
@@ -73,13 +74,14 @@ app.use((req, res) => {
     </ApolloProvider>
   );
 
-  const content = ReactDOMServer.renderToString(component);
+  renderToStringWithData(component).then((content) => {
 
-  const html = <Html content={content}/>;
+    const html = <Html content={content} client={client}/>;
 
-  res.status(200);
-  res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(html)}`);
-  res.end();
+    res.status(200);
+    res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(html)}`);
+    res.end();
+  })
 
 });
 

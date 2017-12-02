@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Html = ({ content }) => (
+const Html = ({ content, client: { cache } }) => (
   <html lang="en">
     <head>
       <meta charSet="utf-8" />
@@ -15,6 +15,12 @@ const Html = ({ content }) => (
     </head>
     <body>
       <div id="content" dangerouslySetInnerHTML={{ __html: content }} />
+      <script
+        charSet="UTF-8"
+        dangerouslySetInnerHTML={{
+          __html: `window.__APOLLO_STATE__=${JSON.stringify(cache.extract())};`,
+        }}
+      />
       <script src="/static/bundle.js" charSet="UTF-8" />
     </body>
   </html>
