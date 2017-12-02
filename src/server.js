@@ -76,7 +76,8 @@ app.use((req, res) => {
 
   renderToStringWithData(component).then((content) => {
 
-    const html = <Html content={content} client={client}/>;
+    const initialState = client.cache.extract();
+    const html = <Html content={content} state={initialState}/>;
 
     res.status(200);
     res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(html)}`);
