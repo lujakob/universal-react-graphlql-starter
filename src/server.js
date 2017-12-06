@@ -74,15 +74,23 @@ app.use((req, res) => {
     </ApolloProvider>
   );
 
-  renderToStringWithData(component).then((content) => {
+  renderToStringWithData(component)
+    .then((content) => {
 
-    const initialState = client.cache.extract();
-    const html = <Html content={content} state={initialState}/>;
+      const initialState = client.cache.extract();
+      const html = <Html content={content} state={initialState}/>;
 
-    res.status(200);
-    res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(html)}`);
-    res.end();
-  })
+      res.status(200);
+      res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(html)}`);
+      res.end();
+    })
+    .catch(e => {
+      console.error('RENDERING ERROR:', e);
+      res.status(500);
+      res.end(
+        `An error occurred. \n\n${e.stack}`
+      );
+    });
 
 });
 
